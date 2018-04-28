@@ -14,6 +14,8 @@ db.once('open', function() {
 });
 
 app.use(morgan('dev'));
+//static only for the requests coming at /uploads vimp
+app.use('/uploads',express.static('uploads'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
