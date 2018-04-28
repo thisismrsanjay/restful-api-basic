@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 
 const Order = require('../models/order');
 const Product = require('../models/product');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/', (req, res, next) => {
+router.get('/',checkAuth, (req, res, next) => {
     Order.find((err, data) => {
         if (err) {
             res.status(500).json(err);
@@ -15,7 +16,7 @@ router.get('/', (req, res, next) => {
     }).populate('product')
 })
 //if you will not get a productid it will return null
-router.post('/', (req, res, next) => {
+router.post('/',checkAuth, (req, res, next) => {
     Product.findById(req.body.productId, (err, data) => {
         //null
         if (err || !data) {
@@ -38,7 +39,7 @@ router.post('/', (req, res, next) => {
 })
 
 
-router.get('/:orderId', (req, res, next) => {
+router.get('/:orderId',checkAuth, (req, res, next) => {
     Order.findById(req.params.orderId,(err,data)=>{
         if(err){
             res.status(400).json(err);
@@ -47,7 +48,7 @@ router.get('/:orderId', (req, res, next) => {
         }
     }).populate('product')
 })
-router.delete('/:orderId', (req, res, next) => {
+router.delete('/:orderId',checkAuth, (req, res, next) => {
     Order.remove({_id:req.params.orderId},(err,data)=>{
         if(err){
             res.status(500).json(err);

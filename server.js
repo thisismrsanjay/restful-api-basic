@@ -5,6 +5,7 @@ const orderRoutes = require('./api/routes/orders');
 const morgan = require('morgan');
 const bodyParser =  require('body-parser');
 const mongoose = require('mongoose');
+const userRoutes = require('./api/routes/users');
 
 mongoose.connect('mongodb://localhost:27017/rest-api');
 var db = mongoose.connection;
@@ -14,6 +15,8 @@ db.once('open', function() {
 });
 
 app.use(morgan('dev'));
+//static only for the requests coming at /uploads vimp
+app.use('/uploads',express.static('uploads'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
@@ -27,6 +30,7 @@ app.use(function(req, res, next) {
 
 app.use('/orders',orderRoutes);
 app.use('/products',productRoutes);
+app.use('/user',userRoutes);
 
 
 app.use('*',(req,res,next)=>{
